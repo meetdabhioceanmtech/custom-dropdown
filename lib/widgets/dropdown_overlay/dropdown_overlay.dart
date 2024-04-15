@@ -1,5 +1,7 @@
 part of '../../custom_dropdown.dart';
 
+late StreamSubscription<bool> keyboardSubscription;
+
 const _defaultOverlayIconUp = Icon(
   Icons.keyboard_arrow_up_rounded,
   size: 20,
@@ -35,7 +37,7 @@ class _DropdownOverlay<T> extends StatefulWidget {
   final _NoResultFoundBuilder? noResultFoundBuilder;
   final CustomDropdownDecoration? decoration;
   final _DropdownType dropdownType;
-
+  final double? keyboardOpenHeight;
   const _DropdownOverlay({
     Key? key,
     required this.items,
@@ -71,6 +73,7 @@ class _DropdownOverlay<T> extends StatefulWidget {
     required this.listItemBuilder,
     required this.headerListBuilder,
     required this.noResultFoundBuilder,
+    this.keyboardOpenHeight,
   });
 
   @override
@@ -86,7 +89,7 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
   late List<T> selectedItems;
   final key1 = GlobalKey(), key2 = GlobalKey();
   final scrollController = ScrollController();
-
+  bool keyboardVisibility = false;
   Widget hintBuilder(BuildContext context) {
     return widget.hintBuilder != null
         ? widget.hintBuilder!(context, widget.hintText)
@@ -188,6 +191,17 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
   @override
   void initState() {
     super.initState();
+
+    var keyboardVisibilityController = KeyboardVisibilityController();
+
+    // Subscribe
+    keyboardSubscription = keyboardVisibilityController.onChange.listen((bool visible) {
+      if (kDebugMode) {
+        print('Keyboard visibility update. Is visible: $visible');
+      }
+      keyboardVisibility = visible;
+      setState(() {});
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final render1 = key1.currentContext?.findRenderObject() as RenderBox;
       final render2 = key2.currentContext?.findRenderObject() as RenderBox;
@@ -212,6 +226,7 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
 
   @override
   void dispose() {
+    keyboardSubscription.cancel();
     scrollController.dispose();
     super.dispose();
   }
@@ -233,13 +248,15 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
   @override
   Widget build(BuildContext context) {
     // decoration
+    print(widget.keyboardOpenHeight);
     final decoration = widget.decoration;
 
     // search availability check
     final onSearch = widget.searchType != null;
-
+    print(MediaQuery.of(context).viewInsets.bottom);
     // overlay offset
-    final overlayOffset = Offset(-12, displayOverlayBottom ? 0 : 64);
+    final overlayOffset =
+        Offset(-12, displayOverlayBottom ? 0 : (64 - (keyboardVisibility ? (widget.keyboardOpenHeight ?? 0) : 0)));
 
     // list padding
     final listPadding = onSearch ? const EdgeInsets.only(top: 8) : EdgeInsets.zero;

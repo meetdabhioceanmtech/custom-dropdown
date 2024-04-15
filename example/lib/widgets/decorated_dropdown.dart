@@ -18,6 +18,7 @@ class DecoratedDropdown extends StatelessWidget {
       excludeSelected: false,
       hideSelectedFieldWhenExpanded: true,
       closedHeaderPadding: const EdgeInsets.all(20),
+      keyboardOpenHeight: 300,
       onChanged: (value) {
         log('DecoratedDropdown onChanged value: $value');
       },

@@ -73,19 +73,24 @@ class _HomeState extends State<Home> {
         ),
         body: TabBarView(
           children: [
-            ListView(
-              padding: const EdgeInsets.all(16.0),
-              children: [
-                const SimpleDropdown(),
-                const SizedBox(height: 16),
-                const SearchDropdown(),
-                const SizedBox(height: 16),
-                const SearchRequestDropdown(),
-                const SizedBox(height: 16),
-                const DecoratedDropdown(),
-                const SizedBox(height: 16),
-                ValidationDropdown(),
-              ],
+            Padding(
+              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              child: SingleChildScrollView(
+                child: Column(
+                  // padding: const EdgeInsets.all(16.0),
+                  children: [
+                    const SimpleDropdown(),
+                    const SizedBox(height: 16),
+                    const SearchDropdown(),
+                    const SizedBox(height: 16),
+                    const SearchRequestDropdown(),
+                    const SizedBox(height: 16),
+                    ValidationDropdown(),
+                    const SizedBox(height: 500),
+                    const DecoratedDropdown(),
+                  ],
+                ),
+              ),
             ),
             ListView(
               padding: const EdgeInsets.all(16.0),

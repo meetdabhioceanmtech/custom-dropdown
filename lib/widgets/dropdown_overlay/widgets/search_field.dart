@@ -47,8 +47,7 @@ class _SearchFieldState<T> extends State<_SearchField<T>> {
   @override
   void initState() {
     super.initState();
-    if (widget.searchType == _SearchType.onRequestData &&
-        widget.items.isEmpty) {
+    if (widget.searchType == _SearchType.onRequestData && widget.items.isEmpty) {
       focusNode.requestFocus();
     }
   }
@@ -103,6 +102,10 @@ class _SearchFieldState<T> extends State<_SearchField<T>> {
       child: TextField(
         focusNode: focusNode,
         style: widget.decoration?.textStyle,
+        scrollPadding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+          top: MediaQuery.of(context).viewInsets.top,
+        ),
         onChanged: (val) async {
           if (val.isEmpty) {
             isFieldEmpty = true;
@@ -110,15 +113,12 @@ class _SearchFieldState<T> extends State<_SearchField<T>> {
             isFieldEmpty = false;
           }
 
-          if (widget.searchType != null &&
-              widget.searchType == _SearchType.onRequestData &&
-              val.isNotEmpty) {
+          if (widget.searchType != null && widget.searchType == _SearchType.onRequestData && val.isNotEmpty) {
             widget.onFutureRequestLoading!(true);
 
             if (widget.futureRequestDelay != null) {
               _delayTimer?.cancel();
-              _delayTimer =
-                  Timer(widget.futureRequestDelay ?? Duration.zero, () {
+              _delayTimer = Timer(widget.futureRequestDelay ?? Duration.zero, () {
                 searchRequest(val);
               });
             } else {
@@ -133,16 +133,12 @@ class _SearchFieldState<T> extends State<_SearchField<T>> {
         controller: searchCtrl,
         decoration: InputDecoration(
           filled: true,
-          fillColor: widget.decoration?.fillColor ??
-              SearchFieldDecoration._defaultFillColor,
-          constraints: widget.decoration?.constraints ??
-              const BoxConstraints.tightFor(height: 40),
-          contentPadding:
-              widget.decoration?.contentPadding ?? const EdgeInsets.all(8),
+          fillColor: widget.decoration?.fillColor ?? SearchFieldDecoration._defaultFillColor,
+          constraints: widget.decoration?.constraints ?? const BoxConstraints.tightFor(height: 40),
+          contentPadding: widget.decoration?.contentPadding ?? const EdgeInsets.all(8),
           hintText: widget.searchHintText,
           hintStyle: widget.decoration?.hintStyle,
-          prefixIcon: widget.decoration?.prefixIcon ??
-              const Icon(Icons.search, size: 22),
+          prefixIcon: widget.decoration?.prefixIcon ?? const Icon(Icons.search, size: 22),
           suffixIcon: widget.decoration?.suffixIcon?.call(onClear) ??
               GestureDetector(
                 onTap: onClear,

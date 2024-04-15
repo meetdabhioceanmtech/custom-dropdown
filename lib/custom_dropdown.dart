@@ -2,7 +2,9 @@ library animated_custom_dropdown;
 
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 
 export 'custom_dropdown.dart';
 
@@ -147,6 +149,8 @@ class CustomDropdown<T> extends StatefulWidget {
 
   final _DropdownType _dropdownType;
 
+  final double? keyboardOpenHeight;
+
   CustomDropdown({
     super.key,
     required this.items,
@@ -168,6 +172,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.canCloseOutsideBounds = true,
     this.hideSelectedFieldWhenExpanded = false,
     this.excludeSelected = true,
+    this.keyboardOpenHeight,
   })  : assert(
           items!.isNotEmpty,
           'Items list must contain at least one item.',
@@ -213,6 +218,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.excludeSelected = true,
     this.canCloseOutsideBounds = true,
     this.hideSelectedFieldWhenExpanded = false,
+    this.keyboardOpenHeight,
   })  : assert(
           items!.isNotEmpty,
           'Items list must contain at least one item.',
@@ -258,6 +264,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.excludeSelected = true,
     this.canCloseOutsideBounds = true,
     this.hideSelectedFieldWhenExpanded = false,
+    this.keyboardOpenHeight,
   })  : _searchType = _SearchType.onRequestData,
         _dropdownType = _DropdownType.singleSelect,
         initialItems = null,
@@ -285,14 +292,13 @@ class CustomDropdown<T> extends StatefulWidget {
     this.expandedHeaderPadding,
     this.itemsListPadding,
     this.listItemPadding,
+    this.keyboardOpenHeight,
   })  : assert(
           items!.isNotEmpty,
           'Items list must contain at least one item.',
         ),
         assert(
-          initialItems == null ||
-              initialItems.isEmpty ||
-              initialItems.any((e) => items!.contains(e)),
+          initialItems == null || initialItems.isEmpty || initialItems.any((e) => items!.contains(e)),
           'Initial items must match with the items in the items list.',
         ),
         _searchType = null,
@@ -332,14 +338,13 @@ class CustomDropdown<T> extends StatefulWidget {
     this.expandedHeaderPadding,
     this.itemsListPadding,
     this.listItemPadding,
+    this.keyboardOpenHeight,
   })  : assert(
           items!.isNotEmpty,
           'Items list must contain at least one item.',
         ),
         assert(
-          initialItems == null ||
-              initialItems.isEmpty ||
-              initialItems.any((e) => items!.contains(e)),
+          initialItems == null || initialItems.isEmpty || initialItems.any((e) => items!.contains(e)),
           'Initial items must match with the items in the items list.',
         ),
         _searchType = _SearchType.onListData,
@@ -379,6 +384,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.listItemPadding,
     this.canCloseOutsideBounds = true,
     this.hideSelectedFieldWhenExpanded = false,
+    this.keyboardOpenHeight,
   })  : _searchType = _SearchType.onRequestData,
         _dropdownType = _DropdownType.multipleSelect,
         initialItem = null,
@@ -431,12 +437,10 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
     return FormField<(T?, List<T>)>(
       initialValue: (selectedItemNotifier.value, selectedItemsNotifier.value),
       validator: (val) {
-        if (widget._dropdownType == _DropdownType.singleSelect &&
-            widget.validator != null) {
+        if (widget._dropdownType == _DropdownType.singleSelect && widget.validator != null) {
           return widget.validator!(val?.$1);
         }
-        if (widget._dropdownType == _DropdownType.multipleSelect &&
-            widget.listValidator != null) {
+        if (widget._dropdownType == _DropdownType.multipleSelect && widget.listValidator != null) {
           return widget.listValidator!(val?.$2 ?? []);
         }
         return null;
@@ -452,6 +456,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
           child: _OverlayBuilder(
             overlay: (size, hideCallback) {
               return _DropdownOverlay<T>(
+                keyboardOpenHeight: widget.keyboardOpenHeight,
                 onItemSelect: (T value) {
                   switch (widget._dropdownType) {
                     case _DropdownType.singleSelect:
@@ -473,8 +478,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
                     formFieldState.validate();
                   }
                 },
-                noResultFoundText:
-                    widget.noResultFoundText ?? 'No result found.',
+                noResultFoundText: widget.noResultFoundText ?? 'No result found.',
                 noResultFoundBuilder: widget.noResultFoundBuilder,
                 items: widget.items ?? [],
                 selectedItemNotifier: selectedItemNotifier,
@@ -504,8 +508,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
                 headerPadding: widget.expandedHeaderPadding,
                 itemsListPadding: widget.itemsListPadding,
                 listItemPadding: widget.listItemPadding,
-                searchRequestLoadingIndicator:
-                    widget.searchRequestLoadingIndicator,
+                searchRequestLoadingIndicator: widget.searchRequestLoadingIndicator,
                 dropdownType: widget._dropdownType,
               );
             },
@@ -518,9 +521,8 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
                   border: formFieldState.hasError
                       ? (decoration?.closedErrorBorder ?? _defaultErrorBorder)
                       : decoration?.closedBorder,
-                  borderRadius: formFieldState.hasError
-                      ? decoration?.closedErrorBorderRadius
-                      : decoration?.closedBorderRadius,
+                  borderRadius:
+                      formFieldState.hasError ? decoration?.closedErrorBorderRadius : decoration?.closedBorderRadius,
                   shadow: decoration?.closedShadow,
                   hintStyle: decoration?.hintStyle,
                   headerStyle: decoration?.headerStyle,
