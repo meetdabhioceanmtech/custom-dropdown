@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
 export 'custom_dropdown.dart';
 
@@ -151,6 +152,8 @@ class CustomDropdown<T> extends StatefulWidget {
 
   final double? keyboardOpenHeight;
 
+  final Future<List<T>> Function(String)? onEndOfPage;
+
   CustomDropdown({
     super.key,
     required this.items,
@@ -173,6 +176,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.hideSelectedFieldWhenExpanded = false,
     this.excludeSelected = true,
     this.keyboardOpenHeight,
+    this.onEndOfPage,
   })  : assert(
           items!.isNotEmpty,
           'Items list must contain at least one item.',
@@ -219,6 +223,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.canCloseOutsideBounds = true,
     this.hideSelectedFieldWhenExpanded = false,
     this.keyboardOpenHeight,
+    this.onEndOfPage,
   })  : assert(
           items!.isNotEmpty,
           'Items list must contain at least one item.',
@@ -265,6 +270,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.canCloseOutsideBounds = true,
     this.hideSelectedFieldWhenExpanded = false,
     this.keyboardOpenHeight,
+    this.onEndOfPage,
   })  : _searchType = _SearchType.onRequestData,
         _dropdownType = _DropdownType.singleSelect,
         initialItems = null,
@@ -293,6 +299,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.itemsListPadding,
     this.listItemPadding,
     this.keyboardOpenHeight,
+    this.onEndOfPage,
   })  : assert(
           items!.isNotEmpty,
           'Items list must contain at least one item.',
@@ -339,6 +346,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.itemsListPadding,
     this.listItemPadding,
     this.keyboardOpenHeight,
+    this.onEndOfPage,
   })  : assert(
           items!.isNotEmpty,
           'Items list must contain at least one item.',
@@ -385,6 +393,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.canCloseOutsideBounds = true,
     this.hideSelectedFieldWhenExpanded = false,
     this.keyboardOpenHeight,
+    this.onEndOfPage,
   })  : _searchType = _SearchType.onRequestData,
         _dropdownType = _DropdownType.multipleSelect,
         initialItem = null,

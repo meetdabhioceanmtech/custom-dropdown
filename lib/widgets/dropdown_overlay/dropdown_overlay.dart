@@ -38,6 +38,8 @@ class _DropdownOverlay<T> extends StatefulWidget {
   final CustomDropdownDecoration? decoration;
   final _DropdownType dropdownType;
   final double? keyboardOpenHeight;
+  final Future<List<T>> Function(String)? onEndOfPage;
+
   const _DropdownOverlay({
     Key? key,
     required this.items,
@@ -74,6 +76,7 @@ class _DropdownOverlay<T> extends StatefulWidget {
     required this.headerListBuilder,
     required this.noResultFoundBuilder,
     this.keyboardOpenHeight,
+    this.onEndOfPage,
   });
 
   @override
@@ -248,12 +251,10 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
   @override
   Widget build(BuildContext context) {
     // decoration
-    print(widget.keyboardOpenHeight);
     final decoration = widget.decoration;
 
     // search availability check
     final onSearch = widget.searchType != null;
-    print(MediaQuery.of(context).viewInsets.bottom);
     // overlay offset
     final overlayOffset =
         Offset(-12, displayOverlayBottom ? 0 : (64 - (keyboardVisibility ? (widget.keyboardOpenHeight ?? 0) : 0)));
@@ -263,18 +264,23 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
 
     // items list
     final list = items.isNotEmpty
-        ? _ItemsList<T>(
-            scrollController: scrollController,
-            listItemBuilder: widget.listItemBuilder ?? defaultListItemBuilder,
-            excludeSelected: items.length > 1 ? widget.excludeSelected : false,
-            selectedItem: selectedItem,
-            selectedItems: selectedItems,
-            items: items,
-            itemsListPadding: widget.itemsListPadding ?? listPadding,
-            listItemPadding: widget.listItemPadding ?? _defaultListItemPadding,
-            onItemSelect: onItemSelect,
-            decoration: decoration?.listItemDecoration,
-            dropdownType: widget.dropdownType,
+        ? LazyLoadScrollView(
+            onEndOfPage: () async {
+              items = await widget.onEndOfPage!('');
+            },
+            child: _ItemsList<T>(
+              scrollController: scrollController,
+              listItemBuilder: widget.listItemBuilder ?? defaultListItemBuilder,
+              excludeSelected: items.length > 1 ? widget.excludeSelected : false,
+              selectedItem: selectedItem,
+              selectedItems: selectedItems,
+              items: items,
+              itemsListPadding: widget.itemsListPadding ?? listPadding,
+              listItemPadding: widget.listItemPadding ?? _defaultListItemPadding,
+              onItemSelect: onItemSelect,
+              decoration: decoration?.listItemDecoration,
+              dropdownType: widget.dropdownType,
+            ),
           )
         : (mayFoundSearchRequestResult != null && !mayFoundSearchRequestResult!) ||
                 widget.searchType == _SearchType.onListData
