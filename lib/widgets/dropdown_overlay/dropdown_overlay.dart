@@ -271,9 +271,6 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
               if (widget.onEndOfPage != null) {
                 items = await widget.onEndOfPage!('');
               }
-              WidgetsBinding.instance.addTimingsCallback((timings) {
-                setState(() {});
-              });
             },
             child: _ItemsList<T>(
               scrollController: scrollController,
