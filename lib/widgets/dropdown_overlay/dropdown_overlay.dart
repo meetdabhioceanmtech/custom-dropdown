@@ -266,7 +266,9 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
     final list = items.isNotEmpty
         ? LazyLoadScrollView(
             onEndOfPage: () async {
-              items = await widget.onEndOfPage!('');
+              if (widget.onEndOfPage != null) {
+                items = await widget.onEndOfPage!('');
+              }
             },
             child: _ItemsList<T>(
               scrollController: scrollController,
