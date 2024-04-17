@@ -203,7 +203,9 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
         print('Keyboard visibility update. Is visible: $visible');
       }
       keyboardVisibility = visible;
-      setState(() {});
+      WidgetsBinding.instance.addTimingsCallback((timings) {
+        setState(() {});
+      });
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final render1 = key1.currentContext?.findRenderObject() as RenderBox;
@@ -269,6 +271,9 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
               if (widget.onEndOfPage != null) {
                 items = await widget.onEndOfPage!('');
               }
+              WidgetsBinding.instance.addTimingsCallback((timings) {
+                setState(() {});
+              });
             },
             child: _ItemsList<T>(
               scrollController: scrollController,
