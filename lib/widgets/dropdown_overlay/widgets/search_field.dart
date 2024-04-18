@@ -75,11 +75,15 @@ class _SearchFieldState<T> extends State<_SearchField<T>> {
   void onClear() {
     if (searchCtrl.text.isNotEmpty) {
       searchCtrl.clear();
-      widget.onSearchedItems(widget.items);
+      if (widget.searchType == _SearchType.onRequestData) {
+        searchRequest('');
+      } else {
+        widget.onSearchedItems(widget.items);
+      }
     }
   }
 
-  void searchRequest(String val) async {
+  Future<void> searchRequest(String val) async {
     List<T> result = [];
     try {
       result = await widget.futureRequest!(val);
@@ -87,7 +91,11 @@ class _SearchFieldState<T> extends State<_SearchField<T>> {
     } catch (_) {
       widget.onFutureRequestLoading!(false);
     }
-    widget.onSearchedItems(isFieldEmpty ? widget.items : result);
+    if (widget.searchType == _SearchType.onRequestData) {
+      widget.onSearchedItems(result);
+    } else {
+      widget.onSearchedItems(isFieldEmpty ? widget.items : result);
+    }
     widget.mayFoundResult!(result.isNotEmpty);
 
     if (isFieldEmpty) {
@@ -113,17 +121,21 @@ class _SearchFieldState<T> extends State<_SearchField<T>> {
             isFieldEmpty = false;
           }
 
-          if (widget.searchType != null && widget.searchType == _SearchType.onRequestData && val.isNotEmpty) {
+          if (widget.searchType == _SearchType.onRequestData) {
             widget.onFutureRequestLoading!(true);
-
-            if (widget.futureRequestDelay != null) {
-              _delayTimer?.cancel();
-              _delayTimer = Timer(widget.futureRequestDelay ?? Duration.zero, () {
-                searchRequest(val);
-              });
-            } else {
-              searchRequest(val);
+            if (_delayTimer != null) {
+              _delayTimer!.cancel();
             }
+            _delayTimer = Timer(const Duration(seconds: 1), () => searchRequest(val));
+
+            // if (widget.futureRequestDelay != null) {
+            //   _delayTimer?.cancel();
+            //   _delayTimer = Timer(widget.futureRequestDelay ?? Duration.zero, () {
+            //     searchRequest(val);
+            //   });
+            // } else {
+            //   searchRequest(val);
+            // }
           } else if (widget.searchType == _SearchType.onListData) {
             onSearch(val);
           } else {
