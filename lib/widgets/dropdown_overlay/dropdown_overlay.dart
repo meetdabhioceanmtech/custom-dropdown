@@ -203,7 +203,11 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
         print('Keyboard visibility update. Is visible: $visible');
       }
       keyboardVisibility = visible;
-      setState(() {});
+      WidgetsBinding.instance.addTimingsCallback((timings) {
+        if (mounted) {
+          setState(() {});
+        }
+      });
     });
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final render1 = key1.currentContext?.findRenderObject() as RenderBox;
@@ -212,7 +216,9 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
       double y = render1.localToGlobal(Offset.zero).dy;
       if (screenHeight - y < render2.size.height) {
         displayOverlayBottom = false;
-        setState(() {});
+        if (mounted) {
+          setState(() {});
+        }
       }
     });
 
@@ -242,10 +248,14 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
       } else {
         selectedItems.add(value);
       }
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
       return;
     }
-    setState(() => displayOverly = false);
+    if (mounted) {
+      setState(() => displayOverly = false);
+    }
   }
 
   @override
@@ -268,7 +278,9 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
             onEndOfPage: () async {
               if (widget.onEndOfPage != null) {
                 items = await widget.onEndOfPage!('');
-                setState(() {});
+                if (mounted) {
+                  setState(() {});
+                }
               }
             },
             child: _ItemsList<T>(
@@ -354,7 +366,9 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
                                   GestureDetector(
                                     behavior: HitTestBehavior.opaque,
                                     onTap: () {
-                                      setState(() => displayOverly = false);
+                                      if (mounted) {
+                                        setState(() => displayOverly = false);
+                                      }
                                     },
                                     child: Padding(
                                       padding: widget.headerPadding ?? _defaultHeaderPadding,
@@ -381,7 +395,9 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
                                       items: widget.items,
                                       searchHintText: widget.searchHintText,
                                       onSearchedItems: (val) {
-                                        setState(() => items = val);
+                                        if (mounted) {
+                                          setState(() => items = val);
+                                        }
                                       },
                                       decoration: decoration?.searchFieldDecoration,
                                     )
@@ -389,7 +405,9 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
                                     GestureDetector(
                                       behavior: HitTestBehavior.opaque,
                                       onTap: () {
-                                        setState(() => displayOverly = false);
+                                        if (mounted) {
+                                          setState(() => displayOverly = false);
+                                        }
                                       },
                                       child: Padding(
                                         padding: const EdgeInsetsDirectional.only(
@@ -403,7 +421,9 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
                                                 items: widget.items,
                                                 searchHintText: widget.searchHintText,
                                                 onSearchedItems: (val) {
-                                                  setState(() => items = val);
+                                                  if (mounted) {
+                                                    setState(() => items = val);
+                                                  }
                                                 },
                                                 decoration: decoration?.searchFieldDecoration,
                                               ),
@@ -420,14 +440,18 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
                                       items: widget.items,
                                       searchHintText: widget.searchHintText,
                                       onFutureRequestLoading: (val) {
-                                        setState(() {
-                                          isSearchRequestLoading = val;
-                                        });
+                                        if (mounted) {
+                                          setState(() {
+                                            isSearchRequestLoading = val;
+                                          });
+                                        }
                                       },
                                       futureRequest: widget.futureRequest,
                                       futureRequestDelay: widget.futureRequestDelay,
                                       onSearchedItems: (val) {
-                                        setState(() => items = val);
+                                        if (mounted) {
+                                          setState(() => items = val);
+                                        }
                                       },
                                       mayFoundResult: (val) => mayFoundSearchRequestResult = val,
                                       decoration: decoration?.searchFieldDecoration,
@@ -436,7 +460,9 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
                                     GestureDetector(
                                       behavior: HitTestBehavior.opaque,
                                       onTap: () {
-                                        setState(() => displayOverly = false);
+                                        if (mounted) {
+                                          setState(() => displayOverly = false);
+                                        }
                                       },
                                       child: Padding(
                                         padding: const EdgeInsetsDirectional.only(
@@ -450,14 +476,18 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
                                                 items: widget.items,
                                                 searchHintText: widget.searchHintText,
                                                 onFutureRequestLoading: (val) {
-                                                  setState(() {
-                                                    isSearchRequestLoading = val;
-                                                  });
+                                                  if (mounted) {
+                                                    setState(() {
+                                                      isSearchRequestLoading = val;
+                                                    });
+                                                  }
                                                 },
                                                 futureRequest: widget.futureRequest,
                                                 futureRequestDelay: widget.futureRequestDelay,
                                                 onSearchedItems: (val) {
-                                                  setState(() => items = val);
+                                                  if (mounted) {
+                                                    setState(() => items = val);
+                                                  }
                                                 },
                                                 mayFoundResult: (val) => mayFoundSearchRequestResult = val,
                                                 decoration: decoration?.searchFieldDecoration,
@@ -506,7 +536,11 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
       return Stack(
         children: [
           GestureDetector(
-            onTap: () => setState(() => displayOverly = false),
+            onTap: () {
+              if (mounted) {
+                setState(() => displayOverly = false);
+              }
+            },
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
