@@ -4,6 +4,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:lazy_load_scrollview/lazy_load_scrollview.dart';
 
@@ -466,6 +467,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
             overlay: (size, hideCallback) {
               return _DropdownOverlay<T>(
                 keyboardOpenHeight: widget.keyboardOpenHeight,
+                onEndOfPage: widget.onEndOfPage,
                 onItemSelect: (T value) {
                   switch (widget._dropdownType) {
                     case _DropdownType.singleSelect:
