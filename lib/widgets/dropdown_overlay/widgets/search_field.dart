@@ -126,7 +126,7 @@ class _SearchFieldState<T> extends State<_SearchField<T>> {
             if (_delayTimer != null) {
               _delayTimer!.cancel();
             }
-            _delayTimer = Timer(const Duration(seconds: 1), () => searchRequest(val));
+            _delayTimer = Timer(const Duration(seconds: 1), () => searchRequest(val.trim()));
 
             // if (widget.futureRequestDelay != null) {
             //   _delayTimer?.cancel();
@@ -137,7 +137,7 @@ class _SearchFieldState<T> extends State<_SearchField<T>> {
             //   searchRequest(val);
             // }
           } else if (widget.searchType == _SearchType.onListData) {
-            onSearch(val);
+            onSearch(val.trim());
           } else {
             widget.onSearchedItems(widget.items);
           }
