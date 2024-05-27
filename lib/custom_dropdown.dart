@@ -154,7 +154,7 @@ class CustomDropdown<T> extends StatefulWidget {
 
   final Future<List<T>> Function(String)? onEndOfPage;
 
-  CustomDropdown({
+  const CustomDropdown({
     super.key,
     required this.items,
     required this.onChanged,
@@ -177,15 +177,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.excludeSelected = true,
     this.keyboardOpenHeight,
     this.onEndOfPage,
-  })  : assert(
-          items!.isNotEmpty,
-          'Items list must contain at least one item.',
-        ),
-        assert(
-          initialItem == null || items!.contains(initialItem),
-          'Initial item must match with one of the item in items list.',
-        ),
-        _searchType = null,
+  })  : _searchType = null,
         _dropdownType = _DropdownType.singleSelect,
         futureRequest = null,
         futureRequestDelay = null,
@@ -198,7 +190,7 @@ class CustomDropdown<T> extends StatefulWidget {
         headerListBuilder = null,
         searchRequestLoadingIndicator = null;
 
-  CustomDropdown.search({
+  const CustomDropdown.search({
     super.key,
     required this.items,
     required this.onChanged,
@@ -224,15 +216,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.hideSelectedFieldWhenExpanded = false,
     this.keyboardOpenHeight,
     this.onEndOfPage,
-  })  : assert(
-          items!.isNotEmpty,
-          'Items list must contain at least one item.',
-        ),
-        assert(
-          initialItem == null || items!.contains(initialItem),
-          'Initial item must match with one of the item in items list.',
-        ),
-        _searchType = _SearchType.onListData,
+  })  : _searchType = _SearchType.onListData,
         _dropdownType = _DropdownType.singleSelect,
         futureRequest = null,
         futureRequestDelay = null,
@@ -278,7 +262,7 @@ class CustomDropdown<T> extends StatefulWidget {
         listValidator = null,
         headerListBuilder = null;
 
-  CustomDropdown.multiSelect({
+  const CustomDropdown.multiSelect({
     super.key,
     required this.items,
     required this.onListChanged,
@@ -300,15 +284,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.listItemPadding,
     this.keyboardOpenHeight,
     this.onEndOfPage,
-  })  : assert(
-          items!.isNotEmpty,
-          'Items list must contain at least one item.',
-        ),
-        assert(
-          initialItems == null || initialItems.isEmpty || initialItems.any((e) => items!.contains(e)),
-          'Initial items must match with the items in the items list.',
-        ),
-        _searchType = null,
+  })  : _searchType = null,
         _dropdownType = _DropdownType.multipleSelect,
         initialItem = null,
         noResultFoundText = null,
@@ -322,7 +298,7 @@ class CustomDropdown<T> extends StatefulWidget {
         searchHintText = null,
         searchRequestLoadingIndicator = null;
 
-  CustomDropdown.multiSelectSearch({
+  const CustomDropdown.multiSelectSearch({
     super.key,
     required this.items,
     required this.onListChanged,
@@ -347,15 +323,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.listItemPadding,
     this.keyboardOpenHeight,
     this.onEndOfPage,
-  })  : assert(
-          items!.isNotEmpty,
-          'Items list must contain at least one item.',
-        ),
-        assert(
-          initialItems == null || initialItems.isEmpty || initialItems.any((e) => items!.contains(e)),
-          'Initial items must match with the items in the items list.',
-        ),
-        _searchType = _SearchType.onListData,
+  })  : _searchType = _SearchType.onListData,
         _dropdownType = _DropdownType.multipleSelect,
         initialItem = null,
         onChanged = null,

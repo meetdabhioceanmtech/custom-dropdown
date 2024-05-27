@@ -433,7 +433,11 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
                                     )
                                   else
                                     searchBar1(decoration: decoration),
-                                if (isSearchRequestLoading) loadingBar() else listItemView(list: list)
+                                if (isSearchRequestLoading) loadingBar() else listItemView(list: list),
+                                if (items.isEmpty &&
+                                    widget.searchType != _SearchType.onRequestData &&
+                                    widget.searchType != _SearchType.onListData)
+                                  noResultFoundBuilder(context)
                               ],
                             ),
                           ),
