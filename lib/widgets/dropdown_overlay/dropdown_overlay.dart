@@ -310,12 +310,12 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
                             data: Theme.of(context).copyWith(
                               scrollbarTheme: decoration?.overlayScrollbarDecoration ??
                                   ScrollbarThemeData(
-                                    thumbVisibility: MaterialStateProperty.all(
+                                    thumbVisibility: WidgetStateProperty.all(
                                       true,
                                     ),
-                                    thickness: MaterialStateProperty.all(5),
+                                    thickness: WidgetStateProperty.all(5),
                                     radius: const Radius.circular(4),
-                                    thumbColor: MaterialStateProperty.all(
+                                    thumbColor: WidgetStateProperty.all(
                                       Colors.grey[300],
                                     ),
                                   ),
@@ -349,6 +349,7 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
                                       ),
                                     ),
                                   ),
+                                // if (widget.items.isEmpty) Text('No Data Found!'),
                                 if (onSearch && widget.searchType == _SearchType.onListData)
                                   if (!widget.hideSelectedFieldWhenOpen)
                                     _SearchField<T>.forListData(
@@ -460,7 +461,11 @@ class _DropdownOverlayState<T> extends State<_DropdownOverlay<T>> {
                                         ),
                                       )
                                 else
-                                  items.length > 4 ? Expanded(child: list) : list
+                                  items.length > 4 ? Expanded(child: list) : list,
+                                if (items.isEmpty &&
+                                    widget.searchType != _SearchType.onRequestData &&
+                                    widget.searchType != _SearchType.onListData)
+                                  noResultFoundBuilder(context)
                               ],
                             ),
                           ),

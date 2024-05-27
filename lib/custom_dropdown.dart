@@ -147,7 +147,7 @@ class CustomDropdown<T> extends StatefulWidget {
 
   final _DropdownType _dropdownType;
 
-  CustomDropdown({
+  const CustomDropdown({
     super.key,
     required this.items,
     required this.onChanged,
@@ -168,15 +168,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.canCloseOutsideBounds = true,
     this.hideSelectedFieldWhenExpanded = false,
     this.excludeSelected = true,
-  })  : assert(
-          items!.isNotEmpty,
-          'Items list must contain at least one item.',
-        ),
-        assert(
-          initialItem == null || items!.contains(initialItem),
-          'Initial item must match with one of the item in items list.',
-        ),
-        _searchType = null,
+  })  : _searchType = null,
         _dropdownType = _DropdownType.singleSelect,
         futureRequest = null,
         futureRequestDelay = null,
@@ -189,7 +181,7 @@ class CustomDropdown<T> extends StatefulWidget {
         headerListBuilder = null,
         searchRequestLoadingIndicator = null;
 
-  CustomDropdown.search({
+  const CustomDropdown.search({
     super.key,
     required this.items,
     required this.onChanged,
@@ -213,15 +205,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.excludeSelected = true,
     this.canCloseOutsideBounds = true,
     this.hideSelectedFieldWhenExpanded = false,
-  })  : assert(
-          items!.isNotEmpty,
-          'Items list must contain at least one item.',
-        ),
-        assert(
-          initialItem == null || items!.contains(initialItem),
-          'Initial item must match with one of the item in items list.',
-        ),
-        _searchType = _SearchType.onListData,
+  })  : _searchType = _SearchType.onListData,
         _dropdownType = _DropdownType.singleSelect,
         futureRequest = null,
         futureRequestDelay = null,
@@ -265,7 +249,7 @@ class CustomDropdown<T> extends StatefulWidget {
         listValidator = null,
         headerListBuilder = null;
 
-  CustomDropdown.multiSelect({
+  const CustomDropdown.multiSelect({
     super.key,
     required this.items,
     required this.onListChanged,
@@ -285,17 +269,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.expandedHeaderPadding,
     this.itemsListPadding,
     this.listItemPadding,
-  })  : assert(
-          items!.isNotEmpty,
-          'Items list must contain at least one item.',
-        ),
-        assert(
-          initialItems == null ||
-              initialItems.isEmpty ||
-              initialItems.any((e) => items!.contains(e)),
-          'Initial items must match with the items in the items list.',
-        ),
-        _searchType = null,
+  })  : _searchType = null,
         _dropdownType = _DropdownType.multipleSelect,
         initialItem = null,
         noResultFoundText = null,
@@ -309,7 +283,7 @@ class CustomDropdown<T> extends StatefulWidget {
         searchHintText = null,
         searchRequestLoadingIndicator = null;
 
-  CustomDropdown.multiSelectSearch({
+  const CustomDropdown.multiSelectSearch({
     super.key,
     required this.items,
     required this.onListChanged,
@@ -332,17 +306,7 @@ class CustomDropdown<T> extends StatefulWidget {
     this.expandedHeaderPadding,
     this.itemsListPadding,
     this.listItemPadding,
-  })  : assert(
-          items!.isNotEmpty,
-          'Items list must contain at least one item.',
-        ),
-        assert(
-          initialItems == null ||
-              initialItems.isEmpty ||
-              initialItems.any((e) => items!.contains(e)),
-          'Initial items must match with the items in the items list.',
-        ),
-        _searchType = _SearchType.onListData,
+  })  : _searchType = _SearchType.onListData,
         _dropdownType = _DropdownType.multipleSelect,
         initialItem = null,
         onChanged = null,
@@ -431,12 +395,10 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
     return FormField<(T?, List<T>)>(
       initialValue: (selectedItemNotifier.value, selectedItemsNotifier.value),
       validator: (val) {
-        if (widget._dropdownType == _DropdownType.singleSelect &&
-            widget.validator != null) {
+        if (widget._dropdownType == _DropdownType.singleSelect && widget.validator != null) {
           return widget.validator!(val?.$1);
         }
-        if (widget._dropdownType == _DropdownType.multipleSelect &&
-            widget.listValidator != null) {
+        if (widget._dropdownType == _DropdownType.multipleSelect && widget.listValidator != null) {
           return widget.listValidator!(val?.$2 ?? []);
         }
         return null;
@@ -473,8 +435,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
                     formFieldState.validate();
                   }
                 },
-                noResultFoundText:
-                    widget.noResultFoundText ?? 'No result found.',
+                noResultFoundText: widget.noResultFoundText ?? 'No result found.',
                 noResultFoundBuilder: widget.noResultFoundBuilder,
                 items: widget.items ?? [],
                 selectedItemNotifier: selectedItemNotifier,
@@ -504,8 +465,7 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
                 headerPadding: widget.expandedHeaderPadding,
                 itemsListPadding: widget.itemsListPadding,
                 listItemPadding: widget.listItemPadding,
-                searchRequestLoadingIndicator:
-                    widget.searchRequestLoadingIndicator,
+                searchRequestLoadingIndicator: widget.searchRequestLoadingIndicator,
                 dropdownType: widget._dropdownType,
               );
             },
@@ -518,9 +478,8 @@ class _CustomDropdownState<T> extends State<CustomDropdown<T>> {
                   border: formFieldState.hasError
                       ? (decoration?.closedErrorBorder ?? _defaultErrorBorder)
                       : decoration?.closedBorder,
-                  borderRadius: formFieldState.hasError
-                      ? decoration?.closedErrorBorderRadius
-                      : decoration?.closedBorderRadius,
+                  borderRadius:
+                      formFieldState.hasError ? decoration?.closedErrorBorderRadius : decoration?.closedBorderRadius,
                   shadow: decoration?.closedShadow,
                   hintStyle: decoration?.hintStyle,
                   headerStyle: decoration?.headerStyle,

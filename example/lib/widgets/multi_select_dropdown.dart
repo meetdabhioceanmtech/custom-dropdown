@@ -10,7 +10,7 @@ class MultiSelectDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomDropdown<Job>.multiSelect(
-      items: jobItems,
+      items: const [],
       initialItems: jobItems.take(2).toList(),
       onListChanged: (value) {
         log('MultiSelectDropdown onChanged value: $value');

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:animated_custom_dropdown_example/widgets/decorated_dropdown.dart';
 import 'package:animated_custom_dropdown_example/widgets/multi_select_dropdown.dart';
 import 'package:animated_custom_dropdown_example/widgets/search_dropdown.dart';
